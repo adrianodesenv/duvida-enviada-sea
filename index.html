@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEA — Dúvidas Enviadas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --text-primary: #030c3a;
+      --secondary: #0472b8;
+      --secondary-light: #e8f4fc;
+      --white: #ffffff;
+      --bg-page: #f4f7fb;
+      --border: #d6e4f0;
+      --text-muted: #5a6b8a;
+      --shadow: 0 4px 24px rgba(3, 12, 58, 0.08);
+      --radius: 12px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(4, 114, 184, 0.06) 80px,
+          rgba(4, 114, 184, 0.06) 160px
+        );
+      pointer-events: none;
+    }
+
+    .header-bubbles {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 60%, rgba(4, 114, 184, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 60% 80%, rgba(4, 114, 184, 0.15) 0%, transparent 35%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .header-logos {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 1rem;
+    }
+
+    .header-logos img.sea {
+      height: 72px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .header-logos img.alnylam {
+      height: 36px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .header-title {
+      text-align: center;
+      color: var(--white);
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header-title p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-top: 0.25rem;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      max-width: 1100px;
+      margin: -1.25rem auto 0;
+      padding: 0 1.25rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .toolbar-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+
+    .stats {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .stats-count {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .stats-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    input[type="search"],
+    select {
+      font-family: inherit;
+      font-size: 0.875rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      color: var(--text-primary);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="search"] {
+      padding-left: 2.25rem;
+      min-width: 220px;
+    }
+
+    input[type="search"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(4, 114, 184, 0.15);
+    }
+
+    .btn-refresh {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--secondary);
+      color: var(--white);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-refresh:hover {
+      background: #0360a0;
+    }
+
+    .btn-refresh:active {
+      transform: scale(0.98);
+    }
+
+    .btn-refresh:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-refresh svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-refresh.spinning svg {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .auto-refresh {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .auto-refresh input {
+      accent-color: var(--secondary);
+    }
+
+    /* Main */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    .state-box {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .state-box.error {
+      color: #b42318;
+    }
+
+    .state-box .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--secondary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    .questions-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .question-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--secondary);
+      padding: 1.25rem 1.5rem;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      line-height: 1.55;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .meta-item strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .meta-item svg {
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .badge-apresentacao {
+      display: inline-block;
+      background: var(--secondary-light);
+      color: var(--secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .last-updated {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .header-logos img.sea {
+        height: 56px;
+      }
+
+      .header-logos img.alnylam {
+        height: 28px;
+      }
+
+      .toolbar-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      input[type="search"] {
+        width: 100%;
+        min-width: unset;
+      }
+
+      select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-bubbles" aria-hidden="true"></div>
+    <div class="header-inner">
+      <div class="header-logos">
+        <img class="sea" src="assets/sea-logo.png" alt="SEA — Scientific Exchange in Amyloidosis" />
+        <img class="alnylam" src="assets/alnylam-logo.png" alt="Alnylam" />
+      </div>
+      <div class="header-title">
+        <h1>Dúvidas e comentários</h1>
+        <p>Perguntas enviadas pelos participantes do evento</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-card">
+      <div class="stats">
+        <span class="stats-count" id="stats-count">—</span>
+        <span class="stats-label" id="stats-label">carregando…</span>
+      </div>
+      <div class="controls">
+        <label class="search-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="search" id="search" placeholder="Buscar por nome ou pergunta…" autocomplete="off" />
+        </label>
+        <select id="filter-apresentacao" aria-label="Filtrar por apresentação">
+          <option value="">Todas as apresentações</option>
+        </select>
+        <label class="auto-refresh">
+          <input type="checkbox" id="auto-refresh" checked />
+          Atualizar a cada 30s
+        </label>
+        <button type="button" class="btn-refresh" id="btn-refresh" aria-label="Atualizar lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+          </svg>
+          Atualizar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div id="content">
+      <div class="state-box">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Carregando dúvidas…</p>
+      </div>
+    </div>
+    <p class="last-updated" id="last-updated" hidden></p>
+  </main>
+
+  <footer>
+    SEA — Scientific Exchange in Amyloidosis · Dados em tempo real
+  </footer>
+
+  <script>
+    const API_URL = "https://eventos-info.com.br/api/duvida-enviadas";
+    const REFRESH_INTERVAL_MS = 30_000;
+
+    let allQuestions = [];
+    let refreshTimer = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    const icons = {
+      user: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+      calendar: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+      clock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+    };
+
+    function formatDate(iso) {
+      if (!iso) return "—";
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "—";
+      return d.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str ?? "";
+      return div.innerHTML;
+    }
+
+    function normalize(item) {
+      const a = item.attributes || {};
+      return {
+        id: item.id,
+        nome: a.nome_completo || "Anônimo",
+        dataAgenda: a.data_agenda || "—",
+        apresentacao: a.apresentacao || "—",
+        pergunta: a.pergunta_ou_comentario || "",
+        dataEnvio: a.data_envio,
+        dataEnvioMs: a.data_envio ? new Date(a.data_envio).getTime() : 0,
+      };
+    }
+
+    function populateApresentacaoFilter(questions) {
+      const select = $("filter-apresentacao");
+      const current = select.value;
+      const unique = [...new Set(questions.map((q) => q.apresentacao).filter(Boolean))].sort(
+        (a, b) => a.localeCompare(b, "pt-BR")
+      );
+
+      select.innerHTML = '<option value="">Todas as apresentações</option>';
+      unique.forEach((ap) => {
+        const opt = document.createElement("option");
+        opt.value = ap;
+        opt.textContent = ap;
+        select.appendChild(opt);
+      });
+
+      if (unique.includes(current)) select.value = current;
+    }
+
+    function getFiltered() {
+      const search = $("search").value.trim().toLowerCase();
+      const apFilter = $("filter-apresentacao").value;
+
+      return allQuestions.filter((q) => {
+        if (apFilter && q.apresentacao !== apFilter) return false;
+        if (!search) return true;
+        const hay = `${q.nome} ${q.pergunta} ${q.apresentacao} ${q.dataAgenda}`.toLowerCase();
+        return hay.includes(search);
+      });
+    }
+
+    function render(questions) {
+      const content = $("content");
+      const filtered = getFiltered();
+
+      $("stats-count").textContent = filtered.length;
+      $("stats-label").textContent =
+        filtered.length === 1 ? "dúvida exibida" : "dúvidas exibidas";
+
+      if (filtered.length === 0) {
+        content.innerHTML = `
+          <div class="state-box">
+            <p>${questions.length === 0 ? "Nenhuma dúvida enviada ainda." : "Nenhum resultado para os filtros aplicados."}</p>
+          </div>`;
+        return;
+      }
+
+      const cards = filtered
+        .map(
+          (q) => `
+        <article class="question-card" data-id="${q.id}">
+          <span class="badge-apresentacao">${escapeHtml(q.apresentacao)}</span>
+          <p class="question-text">${escapeHtml(q.pergunta)}</p>
+          <div class="question-meta">
+            <span class="meta-item">${icons.user} <strong>${escapeHtml(q.nome)}</strong></span>
+            <span class="meta-item">${icons.calendar} Agenda: ${escapeHtml(q.dataAgenda)}</span>
+            <span class="meta-item">${icons.clock} Enviado em ${escapeHtml(formatDate(q.dataEnvio))}</span>
+          </div>
+        </article>`
+        )
+        .join("");
+
+      content.innerHTML = `<div class="questions-grid">${cards}</div>`;
+    }
+
+    function setLoading(isLoading) {
+      const btn = $("btn-refresh");
+      btn.disabled = isLoading;
+      btn.classList.toggle("spinning", isLoading);
+    }
+
+    function showError(message) {
+      $("content").innerHTML = `
+        <div class="state-box error">
+          <p><strong>Não foi possível carregar as dúvidas.</strong></p>
+          <p style="margin-top:0.5rem;font-size:0.875rem;">${escapeHtml(message)}</p>
+        </div>`;
+      $("stats-count").textContent = "—";
+      $("stats-label").textContent = "erro ao carregar";
+    }
+
+    async function fetchQuestions() {
+      setLoading(true);
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const data = json.data || [];
+
+        allQuestions = data
+          .map(normalize)
+          .sort((a, b) => b.dataEnvioMs - a.dataEnvioMs);
+
+        populateApresentacaoFilter(allQuestions);
+        render(allQuestions);
+
+        const updated = $("last-updated");
+        updated.hidden = false;
+        updated.textContent = `Última atualização: ${formatDate(new Date().toISOString())}`;
+      } catch (err) {
+        console.error(err);
+        showError(
+          err.message === "Failed to fetch"
+            ? "Verifique sua conexão ou se a página está hospedada com acesso à API (CORS)."
+            : err.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function setupAutoRefresh() {
+      if (refreshTimer) clearInterval(refreshTimer);
+      refreshTimer = null;
+      if ($("auto-refresh").checked) {
+        refreshTimer = setInterval(fetchQuestions, REFRESH_INTERVAL_MS);
+      }
+    }
+
+    $("btn-refresh").addEventListener("click", fetchQuestions);
+    $("search").addEventListener("input", () => render(allQuestions));
+    $("filter-apresentacao").addEventListener("change", () => render(allQuestions));
+    $("auto-refresh").addEventListener("change", setupAutoRefresh);
+
+    fetchQuestions();
+    setupAutoRefresh();
+  </script>
+</body>
+</html>
