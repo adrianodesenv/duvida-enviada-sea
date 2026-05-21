@@ -672,6 +672,7 @@
         const data = json.data || [];
 
         allQuestions = data
+          .filter((item) => item.attributes?.ativo === true)
           .map(normalize)
           .sort((a, b) => b.dataEnvioMs - a.dataEnvioMs);
 
